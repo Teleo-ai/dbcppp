@@ -7,7 +7,6 @@
 #include <istream>
 #include <functional>
 #include <unordered_map>
-#include <boost/filesystem.hpp>
 
 #include "Export.h"
 #include "Iterator.h"
@@ -37,7 +36,7 @@ namespace dbcppp
             , std::vector<std::unique_ptr<IAttribute>>&& attribute_defaults
             , std::vector<std::unique_ptr<IAttribute>>&& attribute_values
             , std::string&& comment);
-        static std::map<std::string, std::unique_ptr<INetwork>> LoadNetworkFromFile(const boost::filesystem::path& filename);
+        static std::map<std::string, std::unique_ptr<INetwork>> LoadNetworkFromFile(const std::string& filename);
         static std::unique_ptr<INetwork> LoadDBCFromIs(std::istream &is);
 
 #ifdef ENABLE_KCD

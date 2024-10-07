@@ -14,8 +14,6 @@ option(build_examples "Build examples" ON)
 
 # DEPENDENCIES & Requirements
 
-find_package(Boost COMPONENTS filesystem REQUIRED)
-
 if(NOT Boost_FOUND)
     message(WARNING "Boost not found. Using libdbcppp boost (third-party/boost)")
     include_directories("third-party/boost")
@@ -63,8 +61,6 @@ add_library(${PROJECT_NAME} SHARED ${include} ${headers} ${sources})
 if (build_kcd)
     target_link_libraries(${PROJECT_NAME} PUBLIC libxmlmm)
 endif()
-
-target_link_libraries(${PROJECT_NAME} PUBLIC Boost::filesystem)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     SOVERSION ${PROJECT_VERSION}

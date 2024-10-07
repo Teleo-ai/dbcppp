@@ -324,15 +324,15 @@ bool NetworkImpl::operator!=(const INetwork& rhs) const
     return !(*this == rhs);
 }
 
-std::map<std::string, std::unique_ptr<INetwork>> INetwork::LoadNetworkFromFile(const boost::filesystem::path& filename)
+std::map<std::string, std::unique_ptr<INetwork>> INetwork::LoadNetworkFromFile(const std::string& filename)
 {
     auto result = std::map<std::string, std::unique_ptr<INetwork>>();
-    auto is = std::ifstream(filename.string()); // Convert boost::filesystem::path to std::string
+    auto is = std::ifstream(filename); // Using std::string as filename input
     if (!is.is_open())
     {
         std::cout << "Error: Could not open file " << filename << "\n";
     }
-    else if (filename.extension() == ".dbc")
+    else if (filename.substr(filename.find_last_of(".") + 1) == "dbc")
     {
         auto net = LoadDBCFromIs(is);
         if (net)
@@ -341,7 +341,7 @@ std::map<std::string, std::unique_ptr<INetwork>> INetwork::LoadNetworkFromFile(c
         }
     }
 #ifdef ENABLE_KCD
-    else if (filename.extension() == ".kcd") {
+    else if (filename.substr(filename.find_last_of(".") + 1) == "kcd") {
         result = LoadKCDFromIs(is);
     }
 #endif
