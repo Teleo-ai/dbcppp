@@ -327,7 +327,7 @@ bool NetworkImpl::operator!=(const INetwork& rhs) const
 std::map<std::string, std::unique_ptr<INetwork>> INetwork::LoadNetworkFromFile(const boost::filesystem::path& filename)
 {
     auto result = std::map<std::string, std::unique_ptr<INetwork>>();
-    auto is = std::ifstream(filename);
+    auto is = std::ifstream(filename.string()); // Convert boost::filesystem::path to std::string
     if (!is.is_open())
     {
         std::cout << "Error: Could not open file " << filename << "\n";
