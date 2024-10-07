@@ -15,19 +15,19 @@ namespace dbcppp::DBCX3::Grammar
     using namespace dbcppp::DBCX3::AST;
     using namespace boost::spirit::x3;
     
-    // struct error_handler
-    // {
-    //     template <typename Iterator, typename Exception, typename Context>
-    //     error_handler_result on_error(
-    //           Iterator& first, const Iterator& last
-    //         , const Exception& x, const Context& context)
-    //     {
-    //         auto& error_handler = get<error_handler_tag>(context).get();
-    //         std::string message = "Error! Expecting: " + x.which() + " here:";
-    //         error_handler(x.where(), message);
-    //         return error_handler_result::fail;
-    //     }
-    // };
+    struct error_handler
+    {
+        template <typename Iterator, typename Exception, typename Context>
+        error_handler_result on_error(
+              Iterator& first, const Iterator& last
+            , const Exception& x, const Context& context)
+        {
+            auto& error_handler = get<error_handler_tag>(context).get();
+            std::string message = "Error! Expecting: " + x.which() + " here:";
+            error_handler(x.where(), message);
+            return error_handler_result::fail;
+        }
+    };
 
     static const rule<struct TagBlockComment> block_comment("BlockComment");
     static const rule<struct TagCharString, std::string> quoted_string("CharString");
@@ -376,95 +376,100 @@ namespace dbcppp::DBCX3::Grammar
     BOOST_SPIRIT_DEFINE(signal_group);
     BOOST_SPIRIT_DEFINE(network);
 
-    struct TagCharString                    : annotate_on_success {};
-    struct TagCIdentifier                   : annotate_on_success {};
-    struct TagStartBit                      : annotate_on_success {};
-    struct TagSignalSize                    : annotate_on_success {};
-    struct TagFactor                        : annotate_on_success {};
-    struct TagOffset                        : annotate_on_success {};
-    struct TagMinimum                       : annotate_on_success {};
-    struct TagMaximum                       : annotate_on_success {};
-    struct TagByteOrder                     : annotate_on_success {};
-    struct TagValueType                     : annotate_on_success {};
-    struct TagVersion                       : annotate_on_success {};
-    struct TagNewSymbols                    : annotate_on_success {};
-    struct TagNewSymbol                     : annotate_on_success {};
-    struct TagBitTiming                     : annotate_on_success {};
-    struct TagBaudrate                      : annotate_on_success {};
-    struct TagBTR1                          : annotate_on_success {};
-    struct TagBTR2                          : annotate_on_success {};
-    struct TagNode                          : annotate_on_success {};
-    struct TagNodeName                      : annotate_on_success {};
-    struct TagValueTable                    : annotate_on_success {};
-    struct TagValueTableName                : annotate_on_success {};
-    struct TagValueEncodingDescription      : annotate_on_success {};
-    struct TagTagMessage                    : annotate_on_success {};
-    struct TagMessageId                     : annotate_on_success {};
-    struct TagMessageName                   : annotate_on_success {};
-    struct TagMessageSize                   : annotate_on_success {};
-    struct TagTransmitter                   : annotate_on_success {};
-    struct TagSignal                        : annotate_on_success {};
-    struct TagSignalName                    : annotate_on_success {};
-    struct TagMultiplexerIndicator          : annotate_on_success {};
-    struct TagUnit                          : annotate_on_success {};
-    struct TagReceiver                      : annotate_on_success {};
-    struct TagMessageTransmitter            : annotate_on_success {};
-    struct TagEnvironmentVariable           : annotate_on_success {};
-    struct TagEnvVarName                    : annotate_on_success {};
-    struct TagEnvVarType                    : annotate_on_success {};
-    struct TagInitialValue                  : annotate_on_success {};
-    struct TagEvId                          : annotate_on_success {};
-    struct TagAccessType                    : annotate_on_success {};
-    struct TagAccessNodes                   : annotate_on_success {};
-    struct TagEnvironmentVariableData       : annotate_on_success {};
-    struct TagDataSize                      : annotate_on_success {};
-    struct TagSignalType                    : annotate_on_success {};
-    struct TagSignalTypeName                : annotate_on_success {};
-    struct TagDefaultValue                  : annotate_on_success {};
-    struct TagComment                       : annotate_on_success {};
-    struct TagCommentNetwork                : annotate_on_success {};
-    struct TagCommentNode                   : annotate_on_success {};
-    struct TagCommentMessage                : annotate_on_success {};
-    struct TagCommentSignal                 : annotate_on_success {};
-    struct TagCommentEnvVar                 : annotate_on_success {};
-    struct TagAttributeDefinition           : annotate_on_success {};
-    struct TagObjectType                    : annotate_on_success {};
-    struct TagAttributeName                 : annotate_on_success {};
-    struct TagAttributeValueType            : annotate_on_success {};
-    struct TagAttributeValueTypeInt         : annotate_on_success {};
-    struct TagAttributeValueTypeHex         : annotate_on_success {};
-    struct TagAttributeValueTypeFloat       : annotate_on_success {};
-    struct TagAttributeValueTypeString      : annotate_on_success {};
-    struct TagAttributeValueTypeEnum        : annotate_on_success {};
-    struct TagAttributeDefault              : annotate_on_success {};
-    struct TagAttributeValue                : annotate_on_success {};
-    struct TagAttributeValueEnt             : annotate_on_success {};
-    struct TagAttributeValueEntNetwork      : annotate_on_success {};
-    struct TagAttributeValueEntNode         : annotate_on_success {};
-    struct TagAttributeValueEntMessage      : annotate_on_success {};
-    struct TagAttributeValueEntSignal       : annotate_on_success {};
-    struct TagAttributeValueEntEnvVar       : annotate_on_success {};
-    struct TagValueDescriptionSigEnvVar     : annotate_on_success {};
-    struct TagValueDescriptionSignal        : annotate_on_success {};
-    struct TagValueDescriptionEnvVar        : annotate_on_success {};
-    struct TagSignalExtendedValueType       : annotate_on_success {};
-    struct TagRange                         : annotate_on_success {};
-    struct TagSignalMultiplexerValue        : annotate_on_success {};
-    struct TagNetwork                       : annotate_on_success {};
+    struct TagCharString                    : error_handler, annotate_on_success {};
+    struct TagCIdentifier                   : error_handler, annotate_on_success {};
+    struct TagStartBit                      : error_handler, annotate_on_success {};
+    struct TagSignalSize                    : error_handler, annotate_on_success {};
+    struct TagFactor                        : error_handler, annotate_on_success {};
+    struct TagOffset                        : error_handler, annotate_on_success {};
+    struct TagMinimum                       : error_handler, annotate_on_success {};
+    struct TagMaximum                       : error_handler, annotate_on_success {};
+    struct TagByteOrder                     : error_handler, annotate_on_success {};
+    struct TagValueType                     : error_handler, annotate_on_success {};
+    struct TagVersion                       : error_handler, annotate_on_success {};
+    struct TagNewSymbols                    : error_handler, annotate_on_success {};
+    struct TagNewSymbol                     : error_handler, annotate_on_success {};
+    struct TagBitTiming                     : error_handler, annotate_on_success {};
+    struct TagBaudrate                      : error_handler, annotate_on_success {};
+    struct TagBTR1                          : error_handler, annotate_on_success {};
+    struct TagBTR2                          : error_handler, annotate_on_success {};
+    struct TagNode                          : error_handler, annotate_on_success {};
+    struct TagNodeName                      : error_handler, annotate_on_success {};
+    struct TagValueTable                    : error_handler, annotate_on_success {};
+    struct TagValueTableName                : error_handler, annotate_on_success {};
+    struct TagValueEncodingDescription      : error_handler, annotate_on_success {};
+    struct TagTagMessage                    : error_handler, annotate_on_success {};
+    struct TagMessageId                     : error_handler, annotate_on_success {};
+    struct TagMessageName                   : error_handler, annotate_on_success {};
+    struct TagMessageSize                   : error_handler, annotate_on_success {};
+    struct TagTransmitter                   : error_handler, annotate_on_success {};
+    struct TagSignal                        : error_handler, annotate_on_success {};
+    struct TagSignalName                    : error_handler, annotate_on_success {};
+    struct TagMultiplexerIndicator          : error_handler, annotate_on_success {};
+    struct TagUnit                          : error_handler, annotate_on_success {};
+    struct TagReceiver                      : error_handler, annotate_on_success {};
+    struct TagMessageTransmitter            : error_handler, annotate_on_success {};
+    struct TagEnvironmentVariable           : error_handler, annotate_on_success {};
+    struct TagEnvVarName                    : error_handler, annotate_on_success {};
+    struct TagEnvVarType                    : error_handler, annotate_on_success {};
+    struct TagInitialValue                  : error_handler, annotate_on_success {};
+    struct TagEvId                          : error_handler, annotate_on_success {};
+    struct TagAccessType                    : error_handler, annotate_on_success {};
+    struct TagAccessNodes                   : error_handler, annotate_on_success {};
+    struct TagEnvironmentVariableData       : error_handler, annotate_on_success {};
+    struct TagDataSize                      : error_handler, annotate_on_success {};
+    struct TagSignalType                    : error_handler, annotate_on_success {};
+    struct TagSignalTypeName                : error_handler, annotate_on_success {};
+    struct TagDefaultValue                  : error_handler, annotate_on_success {};
+    struct TagComment                       : error_handler, annotate_on_success {};
+    struct TagCommentNetwork                : error_handler, annotate_on_success {};
+    struct TagCommentNode                   : error_handler, annotate_on_success {};
+    struct TagCommentMessage                : error_handler, annotate_on_success {};
+    struct TagCommentSignal                 : error_handler, annotate_on_success {};
+    struct TagCommentEnvVar                 : error_handler, annotate_on_success {};
+    struct TagAttributeDefinition           : error_handler, annotate_on_success {};
+    struct TagObjectType                    : error_handler, annotate_on_success {};
+    struct TagAttributeName                 : error_handler, annotate_on_success {};
+    struct TagAttributeValueType            : error_handler, annotate_on_success {};
+    struct TagAttributeValueTypeInt         : error_handler, annotate_on_success {};
+    struct TagAttributeValueTypeHex         : error_handler, annotate_on_success {};
+    struct TagAttributeValueTypeFloat       : error_handler, annotate_on_success {};
+    struct TagAttributeValueTypeString      : error_handler, annotate_on_success {};
+    struct TagAttributeValueTypeEnum        : error_handler, annotate_on_success {};
+    struct TagAttributeDefault              : error_handler, annotate_on_success {};
+    struct TagAttributeValue                : error_handler, annotate_on_success {};
+    struct TagAttributeValueEnt             : error_handler, annotate_on_success {};
+    struct TagAttributeValueEntNetwork      : error_handler, annotate_on_success {};
+    struct TagAttributeValueEntNode         : error_handler, annotate_on_success {};
+    struct TagAttributeValueEntMessage      : error_handler, annotate_on_success {};
+    struct TagAttributeValueEntSignal       : error_handler, annotate_on_success {};
+    struct TagAttributeValueEntEnvVar       : error_handler, annotate_on_success {};
+    struct TagValueDescriptionSigEnvVar     : error_handler, annotate_on_success {};
+    struct TagValueDescriptionSignal        : error_handler, annotate_on_success {};
+    struct TagValueDescriptionEnvVar        : error_handler, annotate_on_success {};
+    struct TagSignalExtendedValueType       : error_handler, annotate_on_success {};
+    struct TagRange                         : error_handler, annotate_on_success {};
+    struct TagSignalMultiplexerValue        : error_handler, annotate_on_success {};
+    struct TagNetwork                       : error_handler, annotate_on_success {};
 }
 std::optional<dbcppp::DBCX3::AST::G_Network> dbcppp::DBCX3::ParseFromMemory(const char* begin, const char* end)
 {
     using boost::spirit::x3::with;
     using boost::spirit::x3::error_handler_tag;
     using error_handler_type = boost::spirit::x3::error_handler<const char*>;
-    error_handler_type error_handler(begin, end, std::cerr);
+
+    // Convert char pointers to iterators
+    auto iter_begin = std::string_view(begin, end - begin).begin();
+    auto iter_end = std::string_view(begin, end - begin).end();
+
+    error_handler_type error_handler(iter_begin, iter_end, std::cerr);
     auto const parser =
         with<error_handler_tag>(std::ref(error_handler))
         [
             dbcppp::DBCX3::Grammar::network
         ];
     dbcppp::DBCX3::AST::G_Network gnet;
-    if (phrase_parse(begin, end, parser, Grammar::skipper, gnet) && begin == end)
+    if (phrase_parse(iter_begin, iter_end, parser, Grammar::skipper, gnet) && iter_begin == iter_end)
     {
         return gnet;
     }
