@@ -13,12 +13,7 @@ option(build_examples "Build examples" ON)
 
 
 # DEPENDENCIES & Requirements
-find_package(Boost)
-
-if(NOT Boost_FOUND)
-    message(WARNING "Boost not found. Using libdbcppp boost (third-party/boost)")
-    include_directories("third-party/boost")
-endif()
+include_directories("third-party/boost")
 
 
 # kcd is an xml based can database
