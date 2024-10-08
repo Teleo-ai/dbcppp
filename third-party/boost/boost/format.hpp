@@ -26,7 +26,7 @@
 // ***   Compatibility framework
 #include <boost/format/detail/compat_workarounds.hpp>
 
-#ifdef BOOST_NO_LOCALE_ISDIGIT
+#ifdef BOOST_NO_LOCALE_ISIDIGIT
 #include <cctype>  // we'll use the non-locale  <cctype>'s std::isdigit(int)
 #endif
 

@@ -1,15 +1,4 @@
-// Copyright (C) 2017 Andrzej Krzemienski.
-//
-// Use, modification, and distribution is subject to the Boost Software
-// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
-//
-// See http://www.boost.org/libs/optional for documentation.
-//
-// You are welcome to contact the author at:
-//  akrzemi1@gmail.com
-
-// trivially-copyable version of the storage
+// trivilally-copyable version of the storage
 
 template<class T>
 class tc_optional_base : public optional_tag
@@ -80,7 +69,7 @@ class tc_optional_base : public optional_tag
     // ~tc_optional_base() = default;
 
     // Assigns from another optional<T> (deep-copies the rhs value)
-    void assign ( tc_optional_base const& rhs )
+    void assign ( tc_optional_base const& rhs ) 
     {
       *this = rhs;
     }
@@ -95,7 +84,7 @@ class tc_optional_base : public optional_tag
 #else
         m_storage = static_cast<value_type>(rhs.get());
 #endif
-
+          
       m_initialized = rhs.is_initialized();
     }
 
@@ -110,7 +99,7 @@ class tc_optional_base : public optional_tag
       m_initialized = rhs.is_initialized();
     }
 #endif
-
+    
     void assign ( argument_type val )
     {
       construct(val);
@@ -142,7 +131,7 @@ class tc_optional_base : public optional_tag
     // No-throw (assuming T::~T() doesn't)
     void reset() BOOST_NOEXCEPT { destroy(); }
 
-    // **DEPRECATED** Replaces the current value -if any- with 'val'
+    // **DEPPRECATED** Replaces the current value -if any- with 'val'
     void reset ( argument_type val ) BOOST_NOEXCEPT { assign(val); }
 
     // Returns a pointer to the value if this is initialized, otherwise,
@@ -177,7 +166,7 @@ class tc_optional_base : public optional_tag
     {
       construct(in_place_init, boost::forward<Args>(args)...);
     }
-
+     
     template<class... Args>
     explicit tc_optional_base ( in_place_init_t, Args&&... args )
       :
@@ -185,7 +174,7 @@ class tc_optional_base : public optional_tag
     {
       construct(in_place_init, boost::forward<Args>(args)...);
     }
-
+    
     template<class... Args>
     explicit tc_optional_base ( in_place_init_if_t, bool cond, Args&&... args )
       :
@@ -201,24 +190,24 @@ class tc_optional_base : public optional_tag
        m_storage = value_type( boost::forward<Arg>(arg) );
        m_initialized = true ;
      }
-
+     
     void construct ( in_place_init_t )
      {
        m_storage = value_type();
        m_initialized = true ;
      }
-
+     
     template<class Arg>
     void emplace_assign ( Arg&& arg )
      {
        construct(in_place_init, boost::forward<Arg>(arg)) ;
      }
-
+     
     void emplace_assign ()
      {
        construct(in_place_init) ;
      }
-
+     
     template<class Arg>
     explicit tc_optional_base ( in_place_init_t, Arg&& arg )
       :
@@ -226,11 +215,11 @@ class tc_optional_base : public optional_tag
     {
       construct(in_place_init, boost::forward<Arg>(arg));
     }
-
+    
     explicit tc_optional_base ( in_place_init_t )
       :
       m_initialized(false), m_storage() {}
-
+    
     template<class Arg>
     explicit tc_optional_base ( in_place_init_if_t, bool cond, Arg&& arg )
       :
@@ -239,7 +228,7 @@ class tc_optional_base : public optional_tag
       if ( cond )
         construct(in_place_init, boost::forward<Arg>(arg));
     }
-
+    
     explicit tc_optional_base ( in_place_init_if_t, bool cond )
       :
       m_initialized(false)
@@ -249,21 +238,21 @@ class tc_optional_base : public optional_tag
     }
 
 #else
-
+     
     template<class Arg>
     void construct ( in_place_init_t, const Arg& arg )
      {
        m_storage = value_type( arg );
        m_initialized = true ;
      }
-
+     
     template<class Arg>
     void construct ( in_place_init_t, Arg& arg )
      {
        m_storage = value_type( arg );
        m_initialized = true ;
      }
-
+     
     void construct ( in_place_init_t )
      {
        m_storage = value_type();
@@ -275,18 +264,18 @@ class tc_optional_base : public optional_tag
     {
       construct(in_place_init, arg);
     }
-
+     
     template<class Arg>
     void emplace_assign ( Arg& arg )
     {
       construct(in_place_init, arg);
     }
-
+     
     void emplace_assign ()
     {
       construct(in_place_init);
     }
-
+    
     template<class Arg>
     explicit tc_optional_base ( in_place_init_t, const Arg& arg )
       : m_initialized(false)
@@ -300,13 +289,13 @@ class tc_optional_base : public optional_tag
     {
       construct(in_place_init, arg);
     }
-
+    
     explicit tc_optional_base ( in_place_init_t )
       : m_initialized(false)
     {
       construct(in_place_init);
     }
-
+    
     template<class Arg>
     explicit tc_optional_base ( in_place_init_if_t, bool cond, const Arg& arg )
       : m_initialized(false)
@@ -314,15 +303,15 @@ class tc_optional_base : public optional_tag
       if ( cond )
         construct(in_place_init, arg);
     }
-
+    
     template<class Arg>
     explicit tc_optional_base ( in_place_init_if_t, bool cond, Arg& arg )
       : m_initialized(false)
     {
       if ( cond )
         construct(in_place_init, arg);
-    }
-
+    } 
+    
     explicit tc_optional_base ( in_place_init_if_t, bool cond )
       : m_initialized(false)
     {
@@ -455,7 +444,7 @@ class tc_optional_base : public optional_tag
     //   Thus, the following overload is needed to properly handle the case when the 'lhs'
     //   is another optional.
     //
-    // For VC<=70 compilers this workaround doesn't work because the compiler issues and error
+    // For VC<=70 compilers this workaround dosen't work becasue the comnpiler issues and error
     // instead of choosing the wrong overload
     //
 #ifndef  BOOST_OPTIONAL_DETAIL_NO_RVALUE_REFERENCES

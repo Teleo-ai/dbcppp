@@ -38,6 +38,9 @@ namespace detail
         constexpr array_helper(Value (&&value)[N])
             : value_{ static_cast<Value&&>(value[Is])... } {}
 
+        // silence MSVC warning C4512: assignment operator could not be generated
+        array_helper& operator= (array_helper const&) = delete;
+
         Value value_[N];
     };
 }
@@ -68,6 +71,9 @@ namespace detail
         }
 
         Value value_;
+
+        // silence MSVC warning C4512: assignment operator could not be generated
+        attr_parser& operator= (attr_parser const&) = delete;
     };
     
     template <typename Value, std::size_t N>
@@ -91,6 +97,9 @@ namespace detail
             traits::move_to(this->value_ + 0, this->value_ + N, attr_);
             return true;
         }
+
+        // silence MSVC warning C4512: assignment operator could not be generated
+        attr_parser& operator= (attr_parser const&) = delete;
     };
     
     template <typename Value>

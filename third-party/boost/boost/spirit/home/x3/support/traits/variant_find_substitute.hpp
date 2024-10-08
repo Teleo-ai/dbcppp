@@ -13,22 +13,22 @@
 
 namespace boost { namespace spirit { namespace x3 { namespace traits
 {
-    template <typename Variant, typename T>
+    template <typename Variant, typename Attribute>
     struct variant_find_substitute
     {
-        // Get the type from the Variant that can be a substitute for T.
-        // If none is found, just return T
+        // Get the type from the variant that can be a substitute for Attribute.
+        // If none is found, just return Attribute
 
         typedef Variant variant_type;
         typedef typename variant_type::types types;
         typedef typename mpl::end<types>::type end;
 
-        typedef typename mpl::find<types, T>::type iter_1;
+        typedef typename mpl::find<types, Attribute>::type iter_1;
 
         typedef typename
             mpl::eval_if<
                 is_same<iter_1, end>,
-                mpl::find_if<types, traits::is_substitute<T, mpl::_1> >,
+                mpl::find_if<types, traits::is_substitute<mpl::_1, Attribute> >,
                 mpl::identity<iter_1>
             >::type
         iter;
@@ -36,7 +36,7 @@ namespace boost { namespace spirit { namespace x3 { namespace traits
         typedef typename
             mpl::eval_if<
                 is_same<iter, end>,
-                mpl::identity<T>,
+                mpl::identity<Attribute>,
                 mpl::deref<iter>
             >::type
         type;

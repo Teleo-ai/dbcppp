@@ -36,10 +36,10 @@ namespace boost { namespace fusion
     namespace detail
     {
         template <typename Tag>
-        int get_xalloc_index(int xalloc())
+        int get_xalloc_index(Tag* = 0)
         {
             // each Tag will have a unique index
-            static int const index = xalloc();
+            static int index = std::ios::xalloc();
             return index;
         }
 
@@ -66,19 +66,15 @@ namespace boost { namespace fusion
             {
                 static arena ar; // our arena
                 ar.data.push_back(new T(data));
-                stream.pword(get_xalloc_index<Tag>(stream.xalloc)) = ar.data.back();
+                stream.pword(get_xalloc_index<Tag>()) = ar.data.back();
             }
 
             static T const* get(Stream& stream)
             {
-                return (T const*)stream.pword(get_xalloc_index<Tag>(stream.xalloc));
+                return (T const*)stream.pword(get_xalloc_index<Tag>());
             }
         };
 
-#ifdef _MSC_VER
-#  pragma warning(push)
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#endif
         template <typename Tag, typename Stream>
         class string_ios_manip
         {
@@ -114,6 +110,7 @@ namespace boost { namespace fusion
             {
                 // read a delimiter
                 string_type const* p = stream_data_t::get(stream);
+                std::ws(stream);
 
                 if (p)
                 {
@@ -140,16 +137,16 @@ namespace boost { namespace fusion
                     if (stream.get() != c)
                     {
                         stream.unget();
-                        stream.setstate(Stream::failbit);
+                        stream.setstate(std::ios::failbit);
                     }
                 }
             }
 
             Stream& stream;
+
+            // silence MSVC warning C4512: assignment operator could not be generated
+            BOOST_DELETED_FUNCTION(string_ios_manip& operator= (string_ios_manip const&))
         };
-#ifdef _MSC_VER
-#  pragma warning(pop)
-#endif
 
     } // detail
 

@@ -13,11 +13,6 @@
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/fusion/sequence/intrinsic_fwd.hpp>
 
-#ifdef _MSC_VER
-#  pragma warning(push)
-#  pragma warning(disable: 4512) // assignment operator could not be generated.
-#endif
-
 namespace boost { namespace fusion { namespace detail
 {
     struct segment_sequence_tag {};
@@ -40,10 +35,6 @@ namespace boost { namespace fusion { namespace detail
         {}
     };
 }
-
-#ifdef _MSC_VER
-#  pragma warning(pop)
-#endif
 
 namespace extension
 {

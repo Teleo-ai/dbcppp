@@ -143,7 +143,7 @@
         I,                                                                      \
         ATTRIBUTE)
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1935)
+#ifdef BOOST_MSVC
 #   define BOOST_FUSION_ADAPT_STRUCT_MSVC_REDEFINE_TEMPLATE_PARAM(R,_,ELEM)     \
         typedef ELEM ELEM;
 #   define BOOST_FUSION_ADAPT_STRUCT_MSVC_REDEFINE_TEMPLATE_PARAMS_IMPL(SEQ)    \

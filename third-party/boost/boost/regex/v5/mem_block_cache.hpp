@@ -34,7 +34,6 @@
 namespace boost{
 namespace BOOST_REGEX_DETAIL_NS{
 
-#if BOOST_REGEX_MAX_CACHE_BLOCKS != 0
 #ifdef BOOST_REGEX_MEM_BLOCK_CACHE_LOCK_FREE /* lock free implementation */
 struct mem_block_cache
 {
@@ -86,10 +85,10 @@ struct mem_block_node
 struct mem_block_cache
 {
    // this member has to be statically initialsed:
-   mem_block_node* next { nullptr };
-   unsigned cached_blocks { 0 };
+   mem_block_node* next;
+   unsigned cached_blocks;
 #ifdef BOOST_HAS_THREADS
-   std::mutex mut;
+   boost::static_mutex mut;
 #endif
 
    ~mem_block_cache()
@@ -134,11 +133,14 @@ struct mem_block_cache
    }
    static mem_block_cache& instance()
    {
-      static mem_block_cache block_cache;
+#ifdef BOOST_HAS_THREADS
+      static mem_block_cache block_cache = { 0, 0, BOOST_STATIC_MUTEX_INIT, };
+#else
+      static mem_block_cache block_cache = { 0, 0, };
+#endif
       return block_cache;
    }
 };
-#endif
 #endif
 
 #if BOOST_REGEX_MAX_CACHE_BLOCKS == 0
