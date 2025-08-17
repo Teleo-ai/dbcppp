@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <memory>
 #include <boost/variant.hpp>
 
 #include "Export.h"
